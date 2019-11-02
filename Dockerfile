@@ -12,7 +12,7 @@ ADD s3cfg /root/.s3cfg
 ADD start.sh /start.sh
 RUN chmod +x /start.sh
 
-ADD sync.sh /sync.sh
+ADD put.sh /sync.sh
 RUN chmod +x /sync.sh
 
 ADD get.sh /get.sh

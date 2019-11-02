@@ -13,12 +13,6 @@ else
     echo "No ACCESS_KEY and SECRET_KEY env variable found, assume use of IAM"
 fi
 
-if [[ "$1" == 'no-cron' ]]; then
-    exec /sync.sh
-elif [[ "$1" == 'get' ]]; then
-    exec /get.sh
-elif [[ "$1" == 'delete' ]]; then
-    exec /usr/local/bin/s3cmd del -r "$S3_PATH"
 else
     LOGFIFO='/var/log/cron.fifo'
     if [[ ! -e "$LOGFIFO" ]]; then
