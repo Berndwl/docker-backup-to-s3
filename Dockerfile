@@ -7,7 +7,7 @@ RUN apt-get update && \
 
 RUN pip install s3cmd
 
-RUN apt-get install \
+RUN apt-get update && apt-get install -y \
     apt-transport-https \
     ca-certificates \
     curl \
