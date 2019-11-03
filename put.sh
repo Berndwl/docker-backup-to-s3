@@ -16,6 +16,11 @@ else
   else
   	EXECUTION_COMMAND="mongodump --archive"
   fi
+  if [[ -n "$BACKUP_DB" &&  -n "$BACKUP_COL" ]]; then
+      EXECUTION_COMMAND="$EXECUTION_COMMAND --db $BACKUP_DB --collection $BACKUP_COL"
+  elif [[ -n "$BACKUP_DB" &&  -z "$BACKUP_COL" ]]; then
+        EXECUTION_COMMAND="$EXECUTION_COMMAND --db $BACKUP_DB"
+  fi
 
   docker exec mongo sh -c $EXECUTION_COMMAND > $DATA_PATH
   /usr/local/bin/s3cmd put $PARAMS "$DATA_PATH" "$S3_PATH"

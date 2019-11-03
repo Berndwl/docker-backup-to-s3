@@ -1,5 +1,5 @@
-FROM debian:jessie
-MAINTAINER Ilya Stepanov <dev@ilyastepanov.com>
+FROM ubuntu:18.04
+MAINTAINER Bernd <admin@berndw.com>
 
 RUN apt-get update && \
     apt-get install -y python python-pip cron && \
