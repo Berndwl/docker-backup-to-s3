@@ -6,12 +6,14 @@ echo "Job put started: $(date)"
 
 : ${CONTAINER_NAME:?"CONTAINER_NAME env variable is required"}
 
+EXECUTION_COMMAND="mongodump --archive"
+
 if ! [ -x "$(command -v docker)" ]; then
   echo 'Error: docker is not installed.' >&2
   exit 1
 else
   if [[ -n "$MONGODB_PARAMS" ]]; then
-    EXECUTION_COMMAND="mongodump --archive $MONGODB_PARAMS"
+    EXECUTION_COMMAND="$EXECUTION_COMMAND $MONGODB_PARAMS"
   fi
 
   echo "Executing $EXECUTION_COMMAND"
