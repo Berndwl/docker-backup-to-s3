@@ -12,11 +12,8 @@ ADD s3cfg /root/.s3cfg
 ADD start.sh /start.sh
 RUN chmod +x /start.sh
 
-ADD put.sh /sync.sh
-RUN chmod +x /sync.sh
-
-ADD get.sh /get.sh
-RUN chmod +x /get.sh
+ADD put.sh /put.sh
+RUN chmod +x /put.sh
 
 ENTRYPOINT ["/start.sh"]
 CMD [""]
