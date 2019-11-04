@@ -3,7 +3,6 @@
 set -e
 
 : ${S3_PATH:?"S3_PATH env variable is required"}
-FILE_NAME=`date +%m-%d-%Y`.archive
 CRON_SCHEDULE=${CRON_SCHEDULE:-0 1 * * *}
 
 if [[ -n "$ACCESS_KEY"  &&  -n "$SECRET_KEY" ]]; then
