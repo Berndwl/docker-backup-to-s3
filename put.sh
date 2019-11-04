@@ -4,22 +4,22 @@ set -e
 
 echo "Job put started: $(date)"
 
-: ${CONTAINER_NAME:?"CONTAINER_NAME env variable is required"}
+ARCHIVE_DIR="./dump"
+rm -rf $ARCHIVE_DIR
 
-EXECUTION_COMMAND="mongodump --archive"
+FILE_NAME=`date +%m-%d-%Y`.gz
+FILE_LOCATION="$ARCHIVE_DIR/$FILE_NAME"
 
-if ! [ -x "$(command -v docker)" ]; then
-  echo 'Error: docker is not installed.' >&2
-  exit 1
-else
-  if [[ -n "$MONGODB_PARAMS" ]]; then
-    EXECUTION_COMMAND="$EXECUTION_COMMAND $MONGODB_PARAMS"
-  fi
+ARCHIVE_COMMAND="--archive=$FILE_NAME --gzip"
 
-  echo "Executing $EXECUTION_COMMAND"
-
-  docker exec $CONTAINER_NAME sh -c '$EXECUTION_COMMAND' > $DATA_PATH
-  /usr/local/bin/s3cmd put $PARAMS "$DATA_PATH" "$S3_PATH"
-
-  echo "Job finished: $(date)"
+if [[ -n "$MONGODB_PARAMS" ]]; then
+  ARCHIVE_COMMAND="$MONGODB_PARAMS $ARCHIVE_COMMAND"
 fi
+
+echo "Executing $ARCHIVE_COMMAND"
+mongodump $ARCHIVE_COMMAND
+
+echo "POSTING to $S3_PATH"
+/usr/local/bin/s3cmd put $PARAMS "$FILE_LOCATION" "$S3_PATH"
+
+echo "Job finished: $(date)"
