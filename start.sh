@@ -4,7 +4,6 @@ set -e
 
 : ${S3_PATH:?"S3_PATH env variable is required"}
 FILE_NAME=`date +%m-%d-%Y`.archive
-export DATA_PATH="${DATA_PATH:-/data/}$FILE_NAME"
 CRON_SCHEDULE=${CRON_SCHEDULE:-0 1 * * *}
 
 if [[ -n "$ACCESS_KEY"  &&  -n "$SECRET_KEY" ]]; then
@@ -28,7 +27,6 @@ if [[ ! -e "$LOGFIFO" ]]; then
     mkfifo "$LOGFIFO"
 fi
 CRON_ENV="PARAMS='$PARAMS'"
-CRON_ENV="$CRON_ENV\nDATA_PATH='$DATA_PATH'"
 CRON_ENV="$CRON_ENV\nS3_PATH='$S3_PATH'"
 CRON_ENV="$CRON_ENV\nMONGODB_PARAMS='$MONGODB_PARAMS'"
 echo -e "$CRON_ENV\n$CRON_SCHEDULE /put.sh > $LOGFIFO 2>&1" | crontab -
