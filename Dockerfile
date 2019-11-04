@@ -21,7 +21,7 @@ RUN add-apt-repository \
        $(lsb_release -cs) \
        stable"
 
-RUN apt-get update && apt-get install docker-ce
+RUN apt-get update && apt-get install -y docker-ce
 
 ADD s3cfg /root/.s3cfg
 
