@@ -23,3 +23,7 @@ echo "POSTING to $S3_PATH"
 /usr/local/bin/s3cmd put $PARAMS "$FILE_LOCATION" "$S3_PATH"
 
 echo "Job finished: $(date)"
+
+#Remove archive locally
+rm -rf $ARCHIVE_DIR
+rm $FILE_NAME
