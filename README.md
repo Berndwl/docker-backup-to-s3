@@ -34,3 +34,45 @@ Run mongo upload to S3 everyday at 12:00pm:
         -e 'CRON_SCHEDULE=0 12 * * *' \
         -v /home/user/data:/data:ro \
         wolved/docker-mongo-backup-to-s3
+        
+Or docker-compose:
+
+
+networks:
+  your_network:
+    name: your_network
+    driver: bridge
+    ipam:
+      config:
+      - subnet: 172.16.0.0/24
+
+services:
+  mongo:
+    image: mongo
+    container_name: 'mongo'
+    ports:
+      - '27017:27017'
+    restart: always
+    networks: 
+      your_network:
+        ipv4_address: 172.16.0.2
+    command: mongod --bind_ip 127.0.0.1,172.16.0.2
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: -
+      MONGO_INITDB_ROOT_PASSWORD: -
+      
+  mgob:
+    image: wolved/docker-mongo-backup-to-s3
+    container_name: 'mgob'
+    networks: 
+      - your_network
+    environment:
+      - ACCESS_KEY=access_key
+      - SECRET_KEY=secret_key
+      - S3_PATH=s3://your-path/
+      - HOST_BASE=s3.example.com
+      - HOST_BUCKET="%(bucket)s.s3.example.com"
+      - MONGODB_PARAMS="-u user -p pass --authenticationDatabase admin --db your_db --host 172.16.0.2"
+      - 'CRON_SCHEDULE=0 12 * * *'
+    depends_on:
+      - mongo  
